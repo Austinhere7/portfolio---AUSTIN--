@@ -35,7 +35,6 @@ function renderHero() {
   setText("heroSubtitle", profile.subtitle);
   setText("footerNote", profile.footer);
   setLink("primaryCta", profile.ctaLabel, profile.ctaHref);
-  setLink("emailRail", profile.email, `mailto:${profile.email}`);
   setLink("contactMail", profile.email, `mailto:${profile.email}`);
 }
 
@@ -59,27 +58,48 @@ function renderStars() {
   const starsContainer = document.getElementById("stars");
   if (!starsContainer) return;
 
-  const totalStars = 85;
+  const totalStars = 95;
   const starsMarkup = [];
 
   for (let index = 0; index < totalStars; index += 1) {
     const left = Math.random() * 100;
-    const top = Math.random() * 100;
-    const delay = Math.random() * 3;
-    const duration = 2 + Math.random() * 3;
-    const scale = 0.7 + Math.random() * 1.7;
+    const initialOffset = -(Math.random() * 115);
+    const fallDuration = 22 + Math.random() * 18;
+    const fallDelay = -(Math.random() * fallDuration);
+    const twinkleDuration = 2.2 + Math.random() * 3.5;
+    const twinkleDelay = Math.random() * 3;
+    const scale = 0.6 + Math.random() * 1.6;
+    const drift = -18 + Math.random() * 36;
+
     starsMarkup.push(
-      `<span class="star" style="left:${left}%; top:${top}%; animation-delay:${delay}s; animation-duration:${duration}s; transform:scale(${scale});"></span>`
+      `<span class="star" style="left:${left}%; top:${initialOffset}vh; --fall-duration:${fallDuration}s; --fall-delay:${fallDelay}s; --twinkle-duration:${twinkleDuration}s; --twinkle-delay:${twinkleDelay}s; --star-scale:${scale}; --star-drift:${drift}px;"></span>`
     );
   }
 
   starsContainer.innerHTML = starsMarkup.join("");
 }
 
+function setupScrollIndicator() {
+  const fill = document.getElementById("scrollFill");
+  if (!fill) return;
+
+  const updateScrollFill = () => {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = docHeight > 0 ? Math.min(scrollTop / docHeight, 1) : 0;
+    fill.style.height = `${progress * 100}%`;
+  };
+
+  updateScrollFill();
+  window.addEventListener("scroll", updateScrollFill, { passive: true });
+  window.addEventListener("resize", updateScrollFill);
+}
+
 function init() {
   renderHero();
   renderStats();
   renderStars();
+  setupScrollIndicator();
 }
 
 init();
