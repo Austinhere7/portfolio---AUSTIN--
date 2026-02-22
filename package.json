@@ -1,0 +1,12 @@
+{
+  "name": "portfolio-austin",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "http-server . -p 5500 -c-1 || http-server . -p 5501 -c-1",
+    "start": "http-server . -p 5500 -c-1 || http-server . -p 5501 -c-1"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
