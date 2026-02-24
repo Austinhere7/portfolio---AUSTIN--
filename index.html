@@ -25,49 +25,63 @@
       <div id="introName" class="intro-name" data-name="AUSTIN"></div>
       <div id="revealBlocks" class="reveal-columns" aria-hidden="true"></div>
     </div>
+    <div id="stars" class="stars" aria-hidden="true"></div>
 
-    <section class="hero-screen" id="home">
-      <div class="hero-steps" aria-hidden="true">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
-      <div id="stars" class="stars" aria-hidden="true"></div>
+    <header class="topbar">
+      <nav class="top-nav" aria-label="Primary navigation">
+        <a class="nav-link" href="#about">ABOUT</a>
+        <a class="nav-link" href="#experience">EXPERIENCE</a>
+        <a class="nav-link" href="#skills">SKILLS</a>
+        <a class="nav-link" href="#projects">PROJECTS</a>
+        <a class="nav-link" href="#connect">CONNECT</a>
+      </nav>
+    </header>
 
-      <header class="topbar">
-        <nav class="top-nav" aria-label="Primary navigation">
-          <a href="#">About</a>
-          <a href="#">Experience</a>
-          <a href="#">Skills</a>
-          <a href="#">Projects</a>
-          <a href="#contact">Contact</a>
-        </nav>
-      </header>
-
-      <div class="hero-wrap">
-        <div class="hero-main">
-          <h1 class="hero-title">
-            <span id="heroLine1">FRONTEND</span>
-            <span id="heroLine2">DEVELOPER</span>
-          </h1>
-          <p id="heroSubtitle" class="hero-subtitle">
-            Hi! I'm Your Name. A creative Frontend Developer with 3+ years of experience in building high-performance, scalable, and responsive web solutions.
-          </p>
-          <a id="primaryCta" class="hire-btn" href="#contact">HIRE ME</a>
+    <main class="page-content">
+      <section class="hero-screen section-block" id="about">
+        <div class="hero-wrap">
+          <div class="hero-main">
+            <p class="section-kicker">✶ ABOUT</p>
+            <h1 class="hero-title">
+              <span id="heroLine1">FRONTEND</span>
+              <span id="heroLine2">DEVELOPER</span>
+            </h1>
+            <p id="heroSubtitle" class="hero-subtitle">
+              Hi! I'm Austin. A creative Frontend Developer with 3+ years of experience in building high-performance, scalable, and responsive web solutions.
+            </p>
+            <a id="primaryCta" class="hire-btn" href="#connect">LET'S CONNECT</a>
+          </div>
+          <aside id="stats" class="stats-rail" aria-label="Key statistics"></aside>
         </div>
+      </section>
 
-        <div class="hero-visual" aria-hidden="true">
-          <div class="hero-photo-slot"></div>
-        </div>
-      </div>
-    </section>
+      <section class="content-section section-block" id="experience">
+        <p class="section-kicker">✶ MY EXPERIENCE</p>
+        <h2 class="section-title">Experience</h2>
+        <div id="experienceList" class="card-list"></div>
+      </section>
 
-    <section class="after-hero" id="contact">
-      <aside id="stats" class="stats-rail stats-below" aria-label="Key statistics"></aside>
-      <p class="after-text">Have a project in mind?</p>
-      <a id="contactMail" href="mailto:you@example.com">you@example.com</a>
-      <p id="footerNote">Designed & built by Your Name</p>
-    </section>
+      <section class="content-section section-block" id="skills">
+        <p class="section-kicker">✶ SKILLS STACK</p>
+        <h2 class="section-title">Skills</h2>
+        <div id="skillsGroups" class="skills-groups"></div>
+      </section>
+
+      <section class="content-section section-block" id="projects">
+        <p class="section-kicker">✶ SELECTED PROJECTS</p>
+        <h2 class="section-title">Projects</h2>
+        <div id="projectsList" class="projects-list"></div>
+      </section>
+
+      <section class="content-section section-block" id="connect">
+        <p class="section-kicker">✶ CONNECT</p>
+        <h2 class="section-title">Let's build something</h2>
+        <p class="connect-text">Have a project in mind or a role to discuss? Reach out anytime.</p>
+        <a id="contactMail" href="mailto:you@example.com">you@example.com</a>
+        <div id="connectLinks" class="connect-links"></div>
+        <p id="footerNote">Designed & built by Austin</p>
+      </section>
+    </main>
 
     <script src="script.js"></script>
   </body>
