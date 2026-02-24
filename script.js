@@ -3,11 +3,11 @@ const portfolioData = {
     heroLine1: "FRONTEND",
     heroLine2: "DEVELOPER",
     subtitle:
-      "Hi! I'm Your Name. A creative Frontend Developer with 3+ years of experience in building high-performance, scalable, and responsive web solutions.",
+      "Hi! I'm Austin. A creative Frontend Developer with 3+ years of experience in building high-performance, scalable, and responsive web solutions.",
     email: "you@example.com",
     ctaLabel: "HIRE ME",
     ctaHref: "#contact",
-    footer: "Designed & built by Your Name"
+    footer: "Designed & built by Austin"
   },
   stats: [
     { value: "3+", label: "Years of Experience" },
@@ -95,11 +95,73 @@ function setupScrollIndicator() {
   window.addEventListener("resize", updateScrollFill);
 }
 
+function buildIntroLetters(nameText) {
+  return nameText
+    .split("")
+    .map(
+      (character, index) =>
+        `<span class="intro-letter" style="--letter-index:${index};">${character}</span>`
+    )
+    .join("");
+}
+
+function buildRevealColumns(columnsCount) {
+  return Array.from({ length: columnsCount }, (_, index) => {
+    const rightToLeftOrder = columnsCount - 1 - index;
+    return `<span class="reveal-column" style="--column-order:${rightToLeftOrder};"></span>`;
+  }).join("");
+}
+
+function setupIntroAnimation() {
+  const overlay = document.getElementById("introOverlay");
+  const nameContainer = document.getElementById("introName");
+  const revealColumns = document.getElementById("revealBlocks");
+
+  if (!overlay || !nameContainer || !revealColumns) {
+    document.body.classList.remove("intro-loading");
+    return;
+  }
+
+  const introName = nameContainer.dataset.name?.trim() || "AUSTIN";
+  const columnsCount = Math.max(Math.floor(window.innerWidth / 120), 7);
+  revealColumns.style.setProperty("--intro-columns", String(columnsCount));
+  revealColumns.innerHTML = buildRevealColumns(columnsCount);
+  nameContainer.innerHTML = buildIntroLetters(introName);
+
+  requestAnimationFrame(() => {
+    overlay.classList.add("show-name");
+  });
+
+  const letterDuration = 760;
+  const letterDelay = 95;
+  const revealPause = 420;
+  const columnDropDuration = 700;
+  const columnStagger = 46;
+  const totalLetterTime = letterDuration + Math.max(introName.length - 1, 0) * letterDelay;
+  const revealStart = totalLetterTime + revealPause;
+  const revealDuration = columnDropDuration + Math.max(columnsCount - 1, 0) * columnStagger;
+  const finishAt = revealStart + revealDuration;
+
+  setTimeout(() => {
+    overlay.classList.add("is-revealing");
+  }, revealStart);
+
+  setTimeout(() => {
+    overlay.classList.add("is-done");
+    document.body.classList.remove("intro-loading");
+  }, finishAt);
+
+  setTimeout(() => {
+    overlay.remove();
+  }, finishAt + 480);
+}
+
 function init() {
   renderHero();
   renderStats();
   renderStars();
   setupScrollIndicator();
+  setupIntroAnimation();
 }
 
 init();
