@@ -9,6 +9,13 @@ const portfolioData = {
     ctaHref: "#connect",
     footer: "Designed & built by Austin"
   },
+  introBridge: {
+    title: "Hi, I'm Austin.",
+    lead:
+      "I'm a frontend web developer dedicated to turning ideas into polished digital experiences with clean interfaces and thoughtful interactions.",
+    body:
+      "My approach blends performance, accessibility, and responsive design to create scalable solutions that support real user needs and business goals."
+  },
   experience: [
     {
       company: "Lenient Tree",
@@ -105,16 +112,41 @@ const portfolioData = {
       stack: ["Computer Vision", "State Mapping", "Interactive UI"]
     }
   ],
-  connectLinks: [
-    { label: "LinkedIn", href: "https://www.linkedin.com/in/ausn-shajan" },
-    { label: "GitHub", href: "https://github.com/Austinhere7" }
+  contactMethods: [
+    {
+      label: "Phone",
+      value: "+91 97462 43146",
+      href: "tel:+919746243146",
+      icon: "https://api.iconify.design/mdi/phone.svg?color=%2300d26a"
+    },
+    {
+      label: "Email",
+      value: "austinshajan7@gmail.com",
+      href: "mailto:austinshajan7@gmail.com",
+      icon: "https://api.iconify.design/mdi/gmail.svg?color=%23ea4335"
+    }
   ],
-  stats: [
-    { value: "3+", label: "Years of Experience" },
-    { value: "10+", label: "Completed Projects" },
-    { value: "6+", label: "Core Tech Domains" }
+  connectLinks: [
+    {
+      label: "LinkedIn",
+      href: "https://www.linkedin.com/in/austin-shajan/",
+      icon: "https://api.iconify.design/mdi/linkedin.svg?color=%230a66c2"
+    },
+    {
+      label: "GitHub",
+      href: "https://github.com/Austinhere7",
+      icon: "https://api.iconify.design/mdi/github.svg?color=%23f0f6fc"
+    }
   ]
 };
+
+function ensureStartAtTop() {
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+
+  globalThis.scrollTo({ top: 0, left: 0, behavior: "auto" });
+}
 
 function setText(id, value) {
   const element = document.getElementById(id);
@@ -136,23 +168,13 @@ function renderHero() {
   if (subtitleElement) subtitleElement.innerHTML = profile.subtitle;
   setText("footerNote", profile.footer);
   setLink("primaryCta", profile.ctaLabel, profile.ctaHref);
-  setLink("contactMail", profile.email, `mailto:${profile.email}`);
 }
 
-function renderStats() {
-  const container = document.getElementById("stats");
-  if (!container) return;
-
-  container.innerHTML = portfolioData.stats
-    .map(
-      stat => `
-      <article class="stat-card">
-        <strong>${stat.value}</strong>
-        <span>${stat.label}</span>
-      </article>
-    `
-    )
-    .join("");
+function renderIntroBridge() {
+  const { introBridge } = portfolioData;
+  setText("introTitle", introBridge.title);
+  setText("introTextLead", introBridge.lead);
+  setText("introTextBody", introBridge.body);
 }
 
 function renderExperience() {
@@ -219,12 +241,39 @@ function renderProjects() {
     .join("");
 }
 
+function renderContactMethods() {
+  const container = document.getElementById("contactMethods");
+  if (!container) return;
+
+  container.innerHTML = portfolioData.contactMethods
+    .map(
+      method => `
+      <a class="contact-line" href="${method.href}">
+        <span class="icon-circle">
+          <img src="${method.icon}" alt="${method.label} icon" loading="lazy" decoding="async" />
+        </span>
+        <strong class="contact-line-value">${method.value}</strong>
+      </a>
+    `
+    )
+    .join("");
+}
+
 function renderConnectLinks() {
   const container = document.getElementById("connectLinks");
   if (!container) return;
 
   container.innerHTML = portfolioData.connectLinks
-    .map(link => `<a href="${link.href}" target="_blank" rel="noreferrer">${link.label}</a>`)
+    .map(
+      link => `
+      <a class="social-link" href="${link.href}" target="_blank" rel="noreferrer" aria-label="${link.label}">
+        <span class="icon-circle">
+          <img src="${link.icon}" alt="${link.label} icon" loading="lazy" decoding="async" />
+        </span>
+        <strong class="contact-line-value">${link.label}</strong>
+      </a>
+    `
+    )
     .join("");
 }
 
@@ -348,16 +397,94 @@ function setupIntroAnimation() {
   }, finishAt + 480);
 }
 
+function setupTextRevealAnimation() {
+  const revealSelector = [
+    ".section-kicker",
+    ".hero-title span",
+    ".hero-subtitle",
+    ".hire-btn",
+    ".intro-bridge-kicker",
+    ".intro-bridge-title",
+    ".intro-bridge-copy p",
+    ".section-title",
+    ".meta-line",
+    ".entry-title",
+    ".entry-range",
+    ".entry-summary",
+    ".skill-group-title",
+    ".skill-item",
+    ".project-stack span",
+    ".connect-text",
+    ".contact-line",
+    ".social-link",
+    "#footerNote"
+  ].join(", ");
+
+  const targets = Array.from(document.querySelectorAll(revealSelector));
+  if (!targets.length) return;
+
+  const prefersReducedMotion = globalThis.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (prefersReducedMotion) {
+    targets.forEach(target => target.classList.add("is-visible"));
+    return;
+  }
+
+  targets.forEach((target, index) => {
+    target.classList.add("reveal-on-scroll", "is-leaving-down");
+    target.style.setProperty("--reveal-delay", `${(index % 6) * 55}ms`);
+  });
+
+  let lastScrollY = globalThis.scrollY;
+  let scrollDirection = "down";
+
+  const updateScrollDirection = () => {
+    const currentScrollY = globalThis.scrollY;
+    if (currentScrollY > lastScrollY) scrollDirection = "down";
+    if (currentScrollY < lastScrollY) scrollDirection = "up";
+    lastScrollY = currentScrollY;
+  };
+
+  globalThis.addEventListener("scroll", updateScrollDirection, { passive: true });
+
+  const observer = new IntersectionObserver(
+    entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.remove("is-leaving-up", "is-leaving-down");
+          entry.target.classList.add("is-visible");
+          return;
+        }
+
+        entry.target.classList.remove("is-visible", "is-leaving-up", "is-leaving-down");
+        entry.target.classList.add(
+          scrollDirection === "up" ? "is-leaving-up" : "is-leaving-down"
+        );
+      });
+    },
+    {
+      threshold: 0.18,
+      rootMargin: "0px 0px -10% 0px"
+    }
+  );
+
+  targets.forEach(target => observer.observe(target));
+}
+
 function init() {
+  ensureStartAtTop();
   renderHero();
-  renderStats();
+  renderIntroBridge();
   renderExperience();
   renderSkills();
   renderProjects();
+  renderContactMethods();
   renderConnectLinks();
   renderStars();
   setupSectionNav();
   setupIntroAnimation();
+  setupTextRevealAnimation();
 }
 
 init();
+
+globalThis.addEventListener("pageshow", ensureStartAtTop);
