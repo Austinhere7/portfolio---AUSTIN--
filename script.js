@@ -230,7 +230,7 @@ function renderProjects() {
     .map(
       project => `
       <article class="project-card">
-        <h3 class="entry-title">${project.name}</h3>
+        <h3 class="entry-title project-title">${project.name}</h3>
         <p class="entry-summary">${project.summary}</p>
         <div class="project-stack">
           ${project.stack.map(item => `<span>${item}</span>`).join("")}
