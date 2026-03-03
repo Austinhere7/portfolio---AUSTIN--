@@ -85,31 +85,36 @@ const portfolioData = {
       name: "Lucidus '26",
       summary:
         "Led the UI design and full-stack development for the official college fest website and deployed it for live usage.",
-      stack: ["Next.js", "Node.js", "PostgreSQL"]
+      stack: ["Next.js", "Node.js", "PostgreSQL"],
+      previewPhotos: []
     },
     {
       name: "Cinelenz",
       summary:
         "Built a real-time review aggregation web app using APIs for an engaging and dynamic movie exploration experience.",
-      stack: ["React", "API Integration", "Express"]
+      stack: ["React", "API Integration", "Express"],
+      previewPhotos: []
     },
     {
       name: "Pardon.AI",
       summary:
         "Designed and developed an assistive AI platform to improve digital accessibility through intuitive interfaces.",
-      stack: ["React", "Node.js", "Accessibility"]
+      stack: ["React", "Node.js", "Accessibility"],
+      previewPhotos: []
     },
     {
       name: "Backend AI Chatbot",
       summary:
         "Built a backend chatbot with LangChain, RAG, conversation history, REST APIs, and document upload support.",
-      stack: ["LangChain", "RAG", "PostgreSQL", "pgvector"]
+      stack: ["LangChain", "RAG", "PostgreSQL", "pgvector"],
+      previewPhotos: []
     },
     {
       name: "Rubix.AI",
       summary:
         "Created a camera-powered web app that reads a Rubik's Cube and guides users move-by-move to completion.",
-      stack: ["Computer Vision", "State Mapping", "Interactive UI"]
+      stack: ["Computer Vision", "State Mapping", "Interactive UI"],
+      previewPhotos: []
     }
   ],
   contactMethods: [
@@ -227,17 +232,40 @@ function renderProjects() {
   if (!container) return;
 
   container.innerHTML = portfolioData.projects
-    .map(
-      project => `
-      <article class="project-card">
+    .map((project, projectIndex) => {
+      const fallbackSlots = 3;
+      const photoList = Array.isArray(project.previewPhotos) ? project.previewPhotos : [];
+      const slotCount = Math.max(photoList.length, fallbackSlots);
+
+      const previewSlotsMarkup = Array.from({ length: slotCount }, (_, slotIndex) => {
+        const photoPath = photoList[slotIndex];
+
+        if (photoPath) {
+          return `
+            <figure class="project-preview-item has-photo">
+              <img src="${photoPath}" alt="${project.name} UI preview ${slotIndex + 1}" loading="lazy" decoding="async" />
+            </figure>
+          `;
+        }
+
+        return `
+          <figure class="project-preview-item" aria-hidden="true" data-slot-label="UI Photo ${slotIndex + 1}"></figure>
+        `;
+      }).join("");
+
+      return `
+      <article class="project-card" tabindex="0" style="--project-index:${projectIndex};">
         <h3 class="entry-title project-title">${project.name}</h3>
         <p class="entry-summary">${project.summary}</p>
         <div class="project-stack">
           ${project.stack.map(item => `<span>${item}</span>`).join("")}
         </div>
+        <div class="project-preview-strip" aria-label="${project.name} UI previews">
+          ${previewSlotsMarkup}
+        </div>
       </article>
     `
-    )
+    })
     .join("");
 }
 
