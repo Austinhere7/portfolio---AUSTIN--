@@ -233,40 +233,127 @@ function renderProjects() {
 
   container.innerHTML = portfolioData.projects
     .map((project, projectIndex) => {
-      const fallbackSlots = 3;
-      const photoList = Array.isArray(project.previewPhotos) ? project.previewPhotos : [];
-      const slotCount = Math.max(photoList.length, fallbackSlots);
-
-      const previewSlotsMarkup = Array.from({ length: slotCount }, (_, slotIndex) => {
-        const photoPath = photoList[slotIndex];
-
-        if (photoPath) {
-          return `
-            <figure class="project-preview-item has-photo">
-              <img src="${photoPath}" alt="${project.name} UI preview ${slotIndex + 1}" loading="lazy" decoding="async" />
-            </figure>
-          `;
-        }
-
-        return `
-          <figure class="project-preview-item" aria-hidden="true" data-slot-label="UI Photo ${slotIndex + 1}"></figure>
-        `;
-      }).join("");
-
       return `
-      <article class="project-card" tabindex="0" style="--project-index:${projectIndex};">
+      <article class="project-card" tabindex="0" data-project-index="${projectIndex}" style="--project-index:${projectIndex};">
         <h3 class="entry-title project-title">${project.name}</h3>
         <p class="entry-summary">${project.summary}</p>
         <div class="project-stack">
           ${project.stack.map(item => `<span>${item}</span>`).join("")}
         </div>
-        <div class="project-preview-strip" aria-label="${project.name} UI previews">
-          ${previewSlotsMarkup}
-        </div>
       </article>
     `
     })
     .join("");
+}
+
+function getRandomBetween(min, max) {
+  return min + Math.random() * (max - min);
+}
+
+function createProjectPreviewMarkup(project) {
+  const photoList = Array.isArray(project.previewPhotos) ? project.previewPhotos.slice(0, 3) : [];
+
+  return Array.from({ length: 3 }, (_, slotIndex) => {
+    const photoPath = photoList[slotIndex];
+    const top = getRandomBetween(20, 80);
+    const left = getRandomBetween(18, 82);
+    const rotate = getRandomBetween(-9, 9);
+
+    if (photoPath) {
+      return `
+        <figure class="project-hover-slot has-photo" style="top:${top}%;left:${left}%;transform: translate(-50%, -50%) rotate(${rotate}deg);">
+          <img src="${photoPath}" alt="${project.name} UI preview ${slotIndex + 1}" loading="lazy" decoding="async" />
+        </figure>
+      `;
+    }
+
+    const dummySvg = encodeURIComponent(`
+      <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 300'>
+        <defs>
+          <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
+            <stop offset='0%' stop-color='#1b2330'/>
+            <stop offset='100%' stop-color='#101820'/>
+          </linearGradient>
+        </defs>
+        <rect width='400' height='300' fill='url(#g)'/>
+        <rect x='14' y='14' width='372' height='272' fill='none' stroke='#e5edf9' stroke-opacity='0.45' stroke-dasharray='8 7'/>
+        <text x='200' y='138' text-anchor='middle' fill='#dfe7f6' font-size='30' font-family='Arial, sans-serif' font-weight='700'>DUMMY PREVIEW</text>
+        <text x='200' y='172' text-anchor='middle' fill='#a8b4c9' font-size='22' font-family='Arial, sans-serif'>4:3 SLOT AREA</text>
+      </svg>
+    `);
+    const dummySrc = `data:image/svg+xml;charset=UTF-8,${dummySvg}`;
+
+    return `
+      <figure class="project-hover-slot has-photo" style="top:${top}%;left:${left}%;transform: translate(-50%, -50%) rotate(${rotate}deg);">
+        <img src="${dummySrc}" alt="Dummy preview slot ${slotIndex + 1} for ${project.name}" loading="lazy" decoding="async" />
+      </figure>
+    `;
+  }).join("");
+}
+
+function setupProjectPreviewPopup() {
+  const projectsList = document.getElementById("projectsList");
+  if (!projectsList) return;
+
+  const popup = document.createElement("div");
+  popup.id = "projectPreviewPopup";
+  popup.className = "project-preview-popup";
+  popup.setAttribute("aria-hidden", "true");
+  document.body.appendChild(popup);
+
+  const cards = Array.from(projectsList.querySelectorAll(".project-card"));
+  let activeCard = null;
+
+  const movePopup = (clientX, clientY) => {
+    popup.style.left = `${clientX + 18}px`;
+    popup.style.top = `${clientY + 18}px`;
+  };
+
+  const showPopupForCard = card => {
+    const projectIndex = Number(card.dataset.projectIndex);
+    const project = portfolioData.projects[projectIndex];
+    if (!project) return;
+
+    popup.innerHTML = createProjectPreviewMarkup(project);
+    popup.classList.add("is-visible");
+    popup.setAttribute("aria-hidden", "false");
+  };
+
+  const hidePopup = () => {
+    activeCard = null;
+    popup.classList.remove("is-visible");
+    popup.setAttribute("aria-hidden", "true");
+  };
+
+  cards.forEach(card => {
+    card.addEventListener("mouseenter", event => {
+      activeCard = card;
+      movePopup(event.clientX, event.clientY);
+      showPopupForCard(card);
+    });
+
+    card.addEventListener("mousemove", event => {
+      if (activeCard !== card) return;
+      movePopup(event.clientX, event.clientY);
+    });
+
+    card.addEventListener("mouseleave", hidePopup);
+
+    card.addEventListener("focus", () => {
+      activeCard = card;
+      const rect = card.getBoundingClientRect();
+      movePopup(rect.right, rect.top + rect.height * 0.3);
+      showPopupForCard(card);
+    });
+
+    card.addEventListener("blur", hidePopup);
+  });
+
+  document.addEventListener("scroll", () => {
+    if (activeCard) {
+      hidePopup();
+    }
+  }, { passive: true });
 }
 
 function renderContactMethods() {
@@ -508,6 +595,7 @@ function init() {
   renderContactMethods();
   renderConnectLinks();
   renderStars();
+  setupProjectPreviewPopup();
   setupSectionNav();
   setupIntroAnimation();
   setupTextRevealAnimation();
