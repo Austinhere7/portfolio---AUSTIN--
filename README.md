@@ -1,4 +1,4 @@
-# Austin Shajan — Portfolio Website
+# Austin Shajan-Portfolio Website
 
 This repository contains my personal portfolio website, built to showcase my work, technical strengths, and professional journey in Full Stack and Frontend Development.
 
