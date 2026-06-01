@@ -6,8 +6,7 @@ const portfolioData = {
       "Hi! I'm <span class=\"hero-name-highlight\">AUSTIN SHAJAN</span>. A creative Frontend Developer with strong full-stack exposure, focused on building high-performance, scalable, and responsive digital products.",
     email: "austinshajan7@gmail.com",
     ctaLabel: "LET'S CONNECT",
-    ctaHref: "#connect",
-    footer: "Designed & built by Austin"
+    ctaHref: "#connect"
   },
   introBridge: {
     title: "Hi, I'm Austin.",
