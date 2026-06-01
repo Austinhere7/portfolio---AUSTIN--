@@ -2,6 +2,12 @@
 
 This repository contains my personal portfolio website, built to showcase my work, technical strengths, and professional journey in Full Stack and Frontend Development.
 
+## Live Site
+
+The portfolio is deployed on Vercel here:
+
+- https://portfolio-austin-ten.vercel.app/
+
 ## About Me
 
 I am a Computer Science Engineering undergraduate focused on building user-centered digital products with clean interfaces and practical engineering.
@@ -71,6 +77,14 @@ python -m http.server 5500
 ```
 
 Then open: `http://localhost:5500`
+
+## Deployment
+
+This project is deployed as a static site on Vercel.
+
+- Production URL: https://portfolio-austin-ten.vercel.app/
+- Build command: none required
+- Output directory: repository root
 
 ## Customization
 
