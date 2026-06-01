@@ -86,6 +86,14 @@ This project is deployed as a static site on Vercel.
 - Build command: none required
 - Output directory: repository root
 
+## Automatic Updates
+
+When the Vercel project is connected to this GitHub repository and set to deploy from `main`, every push to the repository will trigger a new production deployment automatically.
+
+- Branch: `main`
+- Deployment type: automatic production deploys from GitHub
+- Result: live site updates after each successful push
+
 ## Customization
 
 Update your content in `script.js`:
