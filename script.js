@@ -25,12 +25,10 @@ const portfolioData = {
         "Led UI/UX and frontend development for the company website with focus on clean interfaces, optimized user flow, and smooth backend integration."
     },
     {
-      company: "LiveArt India",
-      role: "UI Design Intern",
-      location: "Remote",
-      period: "2023 - 2024",
+      company: "IStudio Technologies",
+      role: "Intern",
       summary:
-        "Designed user-centric interfaces and collaborated with engineering teams to improve visual consistency and usability across products."
+        "Designed user-centric interfaces and collaborated with the development team to ensure visual consistency and an enhanced user experience."
     }
   ],
   skillGroups: [
@@ -186,16 +184,19 @@ function renderExperience() {
   if (!container) return;
 
   container.innerHTML = portfolioData.experience
-    .map(
-      entry => `
+    .map(entry => {
+      const metaParts = [entry.company, entry.location].filter(Boolean).join(" · ");
+      const periodMarkup = entry.period ? `<p class="entry-range">${entry.period}</p>` : "";
+
+      return `
       <article class="xp-card">
-        <p class="meta-line">${entry.company} · ${entry.location}</p>
+        ${metaParts ? `<p class="meta-line">${metaParts}</p>` : ""}
         <h3 class="entry-title">${entry.role}</h3>
-        <p class="entry-range">${entry.period}</p>
+        ${periodMarkup}
         <p class="entry-summary">${entry.summary}</p>
       </article>
-    `
-    )
+    `;
+    })
     .join("");
 }
 
