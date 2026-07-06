@@ -374,7 +374,10 @@ function renderContactMethods() {
         <span class="icon-circle">
           <img src="${method.icon}" alt="${method.label} icon" loading="lazy" decoding="async" />
         </span>
-        <strong class="contact-line-value">${method.value}</strong>
+        <span class="contact-line-copy">
+          <span class="contact-line-label">${method.label}</span>
+          <strong class="contact-line-value">${method.value}</strong>
+        </span>
       </a>
     `
     )
@@ -392,7 +395,10 @@ function renderConnectLinks() {
         <span class="icon-circle">
           <img src="${link.icon}" alt="${link.label} icon" loading="lazy" decoding="async" />
         </span>
-        <strong class="contact-line-value">${link.label}</strong>
+        <span class="contact-line-copy">
+          <span class="contact-line-label">Profile</span>
+          <strong class="contact-line-value">${link.label}</strong>
+        </span>
       </a>
     `
     )
