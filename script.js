@@ -112,6 +112,13 @@ const portfolioData = {
         "Created a camera-powered web app that reads a Rubik's Cube and guides users move-by-move to completion.",
       stack: ["Computer Vision", "State Mapping", "Interactive UI"],
       previewPhotos: []
+    },
+    {
+      name: "Web3Ads",
+      summary:
+        "Web3Ads is a full-stack decentralized advertising platform that fairly distributes revenue between advertisers, publishers, and viewers. Built on Base L2 for low-cost transactions, it features privacy-preserving ad tracking using Semaphore zkProofs and supports gasless transactions so viewers never need ETH to withdraw earnings.",
+      stack: ["Base L2", "Semaphore zkProofs", "Gasless Transactions"],
+      previewPhotos: []
     }
   ],
   contactMethods: [
